@@ -50,12 +50,17 @@ class Tree:
 
         return leaf
 
-    def max(self):
+    def max(self, value:int = None):
         if not self.root:
             return None
 
-        current = self.root
+        if value is None:
+            current = self.root
+        else:
+            current = self.find(value)
         max = current
+
+        print(current.value)
 
         while current:
             if current.right is not None:
@@ -83,14 +88,22 @@ class Tree:
         if self.root is None:
             return None
 
-        current = self.root
+        # find the node
+        node = self.find(value)
+        print(node.value)
+
+        #find max of the node
+        predecessor = self.max(node.value)
+
+        return predecessor
 
 
     def __str__(self):
         if not self.root:
             return "Empty tree"
 
-        lines = []
+        # First, collect all levels
+        all_levels = []
         level = [self.root]
 
         while level:
@@ -99,30 +112,44 @@ class Tree:
 
             for node in level:
                 if node:
+                    current_line.append(str(node.value))
                     next_level.extend([node.left, node.right])
                 else:
                     current_line.append("·")
                     next_level.extend([None, None])
 
+            all_levels.append(current_line)
             if any(next_level):
-                lines.append(" ".join(current_line))
                 level = next_level
             else:
-                lines.append(" ".join(current_line))
                 break
+
+        # Calculate spacing
+        max_width = len(all_levels[-1]) * 4  # Width based on bottom level
+        lines = []
+
+        for i, level_nodes in enumerate(all_levels):
+            level_count = 2 ** i
+            spacing = max_width // (level_count + 1)
+            line = " " * (spacing // 2) + (" " * spacing).join(level_nodes)
+            lines.append(line)
 
         return "\n".join(lines)
 
 tree = Tree()
+tree.insert(22)
 tree.insert(10)
+tree.insert(6)
+tree.insert(20)
+tree.insert(46)
+tree.insert(42)
+tree.insert(62)
+tree.insert(78)
+tree.insert(24)
 tree.insert(19)
-tree.insert(11)
-tree.insert(9)
-tree.insert(1)
-tree.insert(10)
-# print(tree)
-print(tree.min())
-print(tree.max())
+tree.insert(21)
+print(tree)
+print(tree.predecessor(10))
 
 # look = tree.find(10)
 # print(look.value)
