@@ -99,7 +99,7 @@ class BinarySearchTree:
 
             # node has 2 children
             else:
-                print("Removing a node with 2 children %d" % node.data)
+                print("Removing a node with 2 children: %d" % node.data)
                 # predecessor is the maximum value of the node's left side
                 predecessor = self._get_predecessor(node.left)
 
@@ -112,12 +112,10 @@ class BinarySearchTree:
 
                 self._remove_node(data, predecessor)
 
-                del node
-
 
     def _get_predecessor(self, node):
         if node.right:
-            self._get_predecessor(node.right)
+            return self._get_predecessor(node.right)
 
         return node
 
@@ -144,6 +142,9 @@ class BinarySearchTree:
     def traverse_in_order(self, node=None):
         if node is None:
             node = self.root
+
+        if node is None:
+            return
 
         if node.left:
             self.traverse_in_order(node.left)
@@ -183,7 +184,7 @@ bst.insert(4)
 bst.insert(12)
 bst.insert(1)
 bst.insert(2)
-bst.insert(-2)
+bst.insert(-1)
 bst.insert(200)
 bst.insert(24)
 min = bst.get_min()
@@ -195,9 +196,9 @@ print("---")
 bst.remove(10)
 bst.remove(4)
 bst.remove(12)
-bst.remove(1)
+bst.remove(-1)
 bst.remove(2)
-bst.remove(-2)
+bst.remove(1)
 bst.remove(200)
 bst.remove(24)
 print("->")
